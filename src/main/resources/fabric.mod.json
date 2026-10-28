@@ -1,0 +1,24 @@
+{
+	"schemaVersion": 1,
+	"id": "torchplanner",
+	"version": "${version}",
+	"name": "Torch Planner",
+	"description": "Highlights where to place torches so every nearby spawnable block gets a light level of at least 1. Simulates real light propagation, so it handles walls, holes and caves, not just flat ground.",
+	"authors": ["doctorthe113"],
+	"license": "MIT",
+	"icon": "assets/torchplanner/icon.png",
+	"environment": "client",
+	"entrypoints": {
+		"client": ["dev.doctorthe113.torchplanner.TorchPlannerClient"],
+		"modmenu": ["dev.doctorthe113.torchplanner.ModMenuIntegration"]
+	},
+	"suggests": {
+		"modmenu": "*"
+	},
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}

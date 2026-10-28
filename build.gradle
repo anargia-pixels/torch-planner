@@ -1,0 +1,93 @@
+plugins {
+	id 'net.fabricmc.fabric-loom' version "${loom_version}"
+}
+
+repositories {
+	maven {
+		name = 'TerraformersMC'
+		url = 'https://maven.terraformersmc.com/releases/'
+	}
+}
+
+loom {
+	splitEnvironmentSourceSets()
+
+	mods {
+		"torchplanner" {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+}
+
+dependencies {
+	// To change the versions see the gradle.properties file
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+	// Fabric API. This is technically optional, but you probably want it anyway.
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	// Optional: Mod Menu integration (config screen). Not required at runtime.
+	compileOnly "com.terraformersmc:modmenu:${project.modmenu_version}"
+	localRuntime "com.terraformersmc:modmenu:${project.modmenu_version}"
+
+	testImplementation platform("org.junit:junit-bom:5.13.4")
+	testImplementation "org.junit.jupiter:junit-jupiter"
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+}
+
+// The solver lives in the client source set; let tests reach it.
+sourceSets.test {
+	compileClasspath += sourceSets.client.output + sourceSets.client.compileClasspath
+	runtimeClasspath += sourceSets.client.output + sourceSets.client.runtimeClasspath
+}
+
+test {
+	useJUnitPlatform()
+}
+
+processResources {
+	def version = project.version
+	inputs.property "version", version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 25
+}
+
+java {
+	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+	// if it is present.
+	// If you remove this line, sources will not be generated.
+	// withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
+}
+
+
+
+// Copies the built jar into the Prism Launcher instance. Override with -PprismModsDir=/path/to/mods
+def prismModsDir = providers.gradleProperty("prismModsDir")
+		.orElse("${System.getProperty('user.home')}/.local/share/PrismLauncher/instances/26.3/minecraft/mods")
+
+def archivesName = base.archivesName
+
+tasks.register("installToPrism", Copy) {
+	group = "distribution"
+	description = "Copies the mod jar into the Prism Launcher instance's mods folder."
+	from tasks.named("jar")
+	into prismModsDir
+	doFirst {
+		// Remove older builds of this mod so only one version is loaded.
+		def prefix = "${archivesName.get()}-"
+		new File(prismModsDir.get()).listFiles()?.findAll { it.name.startsWith(prefix) && it.name.endsWith(".jar") }*.delete()
+	}
+}
+
+tasks.named("build") { finalizedBy "installToPrism" }

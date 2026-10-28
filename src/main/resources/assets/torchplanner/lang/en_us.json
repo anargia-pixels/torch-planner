@@ -1,0 +1,23 @@
+{
+	"key.category.torchplanner.main": "Torch Planner",
+	"key.torchplanner.toggle": "Toggle torch planner",
+	"message.torchplanner.enabled": "Torch Planner: ON",
+	"message.torchplanner.disabled": "Torch Planner: OFF",
+	"config.torchplanner.title": "Torch Planner",
+	"config.torchplanner.enabled": "Torch Planner",
+	"config.torchplanner.show_dark_spots": "Show dark spots",
+	"config.torchplanner.show_dark_spots.tooltip": "Red squares on every block a monster can spawn on right now. Purple squares (always shown) are dark spots no floor torch in range can light.",
+	"config.torchplanner.through_walls": "Show through walls",
+	"config.torchplanner.through_walls.tooltip": "Draw markers on top of terrain so you can plan caves from outside them.",
+	"config.torchplanner.horizontal_radius": "Scan radius",
+	"config.torchplanner.horizontal_radius.tooltip": "How far around you to plan. Large radii take a few seconds and need a render distance that covers them (256 blocks = 17 chunks). Gold markers show up to 256 blocks away; red squares only near you. Applies on the next rescan.",
+	"config.torchplanner.vertical_radius": "Scan height (up/down)",
+	"message.torchplanner.planned": "Torch Planner: %s torches to place",
+	"message.torchplanner.done": "Torch Planner: all torches placed, scanning again",
+	"config.torchplanner.vertical_radius.tooltip": "How far up and down to plan. Applies on the next rescan.",
+	"config.torchplanner.rescan": "Rescan",
+	"config.torchplanner.rescan.tooltip": "Throw away the current plan and plan again around where you're standing. The plan otherwise stays fixed until every suggested torch is placed.",
+	"message.torchplanner.reading": "Torch Planner: reading world… %s%%",
+	"message.torchplanner.planning": "Torch Planner: planning… %s%%",
+	"message.torchplanner.planned_partial": "Torch Planner: %s torches to place (part of the area wasn't loaded; raise render distance to cover it)"
+}
